@@ -1,0 +1,35 @@
+[project]
+name = "solarian-picamera"
+version = "0.1.0"
+description = "Raspberry Pi CSI camera module, sensor and bus plugin for Solarian robotics framework"
+authors = [
+    {name = "Raul Garreta", email = "raul@solarian.dev"}
+]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+classifiers = ["License :: OSI Approved :: Apache Software License"]
+requires-python = ">=3.10"
+# picamera2 is not listed: it is a system package (`sudo apt install
+# python3-picamera2`) reached through a venv made with --system-site-packages,
+# and is imported only where the camera is opened, so the module classes (and
+# the robot schema built from them) import on any machine.
+dependencies = [
+    "solarian>=0.2.0",
+    "numpy",
+    "opencv-python",
+    "pydantic",
+]
+
+[project.entry-points."solarian.modules"]
+picamera = "solarian_picamera.module:PiCameraModule"
+
+# `solarian list-cameras` / `calibrate-umi-camera`: list and preview CSI cameras.
+[project.entry-points."solarian.camera_backends"]
+picamera2 = "solarian_picamera.backend"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["solarian_picamera*"]
